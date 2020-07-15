@@ -3,6 +3,35 @@ const fs = require('fs');
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
+
+// check id in the middleware
+exports.checkID = (req, res, next, value) => {
+  console.log(`Tour id is :${value}`);
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+  next();
+};
+
+// checkbody
+//create a checkBody middleware
+// check if body contains the name and price property
+// if not , send back 400 (bad request)
+// Add it to the post handler stack
+
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name && !req.body.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Missing name and price',
+    });
+  }
+  next();
+};
+
 // routehandlers
 exports.getAllTours = (req, res) => {
   console.log(req.requestTime);
@@ -17,60 +46,28 @@ exports.getAllTours = (req, res) => {
 };
 
 exports.getOneTour = (req, res) => {
-  let idTour = parseInt(req.params.id);
-
-  let tour = tours.find((el) => el.id === idTour);
-  if (!tour) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'invalid ID',
-    });
-  } else {
-    res.status(201).json({
-      status: 'success',
-      data: {
-        tour: tour,
-      },
-    });
-  }
+  res.status(201).json({
+    status: 'success',
+    data: {
+      tour: tour,
+    },
+  });
 };
 
 exports.patchTour = (req, res) => {
-  let idTour = parseInt(req.params.id);
-  let tourIndex = tours.find((el) => el.id === idTour);
-  if (!tourIndex) {
-    res.status(404).json({
-      status: 'fail',
-      message: 'Does not exitst',
-    });
-  } else {
-    let tour = Object.assign({ id: tourIndex });
-
-    res.status(204).json({
-      status: 'success',
-      data: {
-        tour: 'Updated the tour...',
-      },
-    });
-  }
+  res.status(204).json({
+    status: 'success',
+    data: {
+      tour: `Updated the tour...${tour}`,
+    },
+  });
 };
 
 exports.deleteTour = (req, res) => {
-  let idTour = parseInt(req.params.id);
-  let tourIndex = tours.find((el) => el.id === idTour);
-  if (!tourIndex) {
-    res.status(404).json({
-      status: 'fail',
-      message: 'Does not exitst',
-    });
-  } else {
-    let tour = Object.assign({ id: tourIndex });
-
-    res.status(204).json({
-      status: 'success',
-      data: null,
-    });
-  }
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
 };
 
 exports.createTour = (req, res) => {

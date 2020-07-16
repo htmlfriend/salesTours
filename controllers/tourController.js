@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
+  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 );
 
 // check id in the middleware
@@ -17,7 +17,7 @@ exports.checkID = (req, res, next, value) => {
 };
 
 // checkbody
-//create a checkBody middleware
+// create a checkBody middleware
 // check if body contains the name and price property
 // if not , send back 400 (bad request)
 // Add it to the post handler stack
@@ -40,7 +40,7 @@ exports.getAllTours = (req, res) => {
     requestedAdd: req.requestTime,
     results: tours.length,
     data: {
-      tours: tours,
+      tours,
     },
   });
 };
@@ -49,7 +49,7 @@ exports.getOneTour = (req, res) => {
   res.status(201).json({
     status: 'success',
     data: {
-      tour: tour,
+      tour,
     },
   });
 };
@@ -72,7 +72,7 @@ exports.deleteTour = (req, res) => {
 
 exports.createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
-  const newTour = Object.assign({ id: newId }, req.body);
+  const newTour = { id: newId, ...req.body };
   tours.push(newTour);
   fs.writeFile(
     `${__dirname}/dev-data/data/tours-simple.json`,
@@ -84,6 +84,6 @@ exports.createTour = (req, res) => {
           tour: newTour,
         },
       });
-    }
+    },
   );
 };

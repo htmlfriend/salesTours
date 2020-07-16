@@ -1,8 +1,9 @@
 const express = require('express');
-const router = express.Router();
-const tourController = require('./../controllers/tourController');
 
-//middleware to check valid id
+const router = express.Router();
+const tourController = require('../controllers/tourController');
+
+// middleware to check valid id
 router.param('id', tourController.checkID);
 
 router

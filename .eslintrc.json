@@ -1,8 +1,7 @@
 {
 	"extends": [
-		"airbnb",
-		"prettier",
-		"plugin: node/recommended"
+		"eslint-config-airbnb-base",
+		"prettier"
 	],
 	"plugins": [
 		"prettier"
@@ -19,13 +18,6 @@
 		"no-return-await": "off",
 		"no-underscore-dangle": "off",
 		"class-methods-use-this": "off",
-		"prefer-destructuring": [
-			"error",
-			{
-				"object": "true",
-				"array": "false"
-			}
-		],
 		"no-unused-vars": [
 			"error",
 			{

@@ -19,26 +19,6 @@ mongoose
     console.log('Connection successful');
   });
 
-// schema
-
-const tourSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Must be a string'],
-    unique: true,
-  },
-  rating: {
-    type: Number,
-    default: 4.5,
-  },
-  price: {
-    type: Number,
-    required: [true, 'Must be a number'],
-  },
-});
-
-const Tour = mongoose.model('Tour', tourSchema);
-
 const port = process.env.PORT || 5000;
 // server
 app.listen(port, () => {

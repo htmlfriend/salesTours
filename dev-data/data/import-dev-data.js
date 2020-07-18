@@ -34,6 +34,7 @@ const importData = async () => {
   } catch (error) {
     console.log(error);
   }
+  process.exit();
 };
 
 // delete data from db
@@ -44,6 +45,7 @@ const deleteDate = async () => {
   } catch (error) {
     console.log(error);
   }
+  process.exit();
 };
 
 if (process.argv[2] === '--import') {

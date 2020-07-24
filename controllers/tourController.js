@@ -27,10 +27,10 @@ exports.getAllTours = async (req, res) => {
         tours,
       },
     });
-  } catch (error) {
+  } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: error,
+      message: err,
     });
   }
 };
@@ -44,10 +44,10 @@ exports.getOneTour = async (req, res) => {
         tour,
       },
     });
-  } catch (error) {
+  } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: error,
+      message: err,
     });
   }
 };
@@ -65,10 +65,10 @@ exports.patchTour = async (req, res) => {
         tour: tour,
       },
     });
-  } catch (error) {
+  } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: error,
+      message: err,
     });
   }
 };
@@ -80,10 +80,10 @@ exports.deleteTour = async (req, res) => {
       status: 'success',
       data: null,
     });
-  } catch (error) {
+  } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: error,
+      message: err,
     });
   }
 };
@@ -98,7 +98,7 @@ exports.createTour = async (req, res) => {
         tour: newTour,
       },
     });
-  } catch (error) {
+  } catch (err) {
     res.status(404).json({
       status: 'fail',
       message: err,
@@ -117,6 +117,7 @@ exports.getTourStats = async (req, res) => {
       {
         $group: {
           // _id: '$ratingsAverage',
+          // _id: '$difficulty',
           _id: { $toUpper: '$difficulty' },
           numTours: { $sum: 1 },
           numRatings: { $sum: '$ratingsQuantity' },
@@ -139,7 +140,7 @@ exports.getTourStats = async (req, res) => {
         stats,
       },
     });
-  } catch (error) {
+  } catch (err) {
     res.status(404).json({
       status: 'fail',
       message: err,
@@ -168,8 +169,9 @@ exports.getMonthlyPlan = async (req, res) => {
           _id: {
             $month: '$startDates',
           },
-
+          // how many courses start in this month
           numToursStarts: { $sum: 1 },
+          // need to know name of the tour
           tours: { $push: '$name' },
         },
       },
@@ -182,9 +184,11 @@ exports.getMonthlyPlan = async (req, res) => {
         },
       },
       {
+        // sort by amount of the tours
         $sort: { numToursStarts: -1 },
       },
       {
+        // how many documents need to show to users
         $limit: 12,
       },
     ]);
@@ -194,7 +198,7 @@ exports.getMonthlyPlan = async (req, res) => {
         plan,
       },
     });
-  } catch (error) {
+  } catch (err) {
     res.status(404).json({
       status: 'fail',
       message: err,

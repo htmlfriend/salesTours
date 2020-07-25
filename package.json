@@ -5,9 +5,10 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "debug": "DEBUG=express:router* node server.js",
+    "debug:router": "DEBUG=express:router* node server.js",
     "start:prod": "process.env.NODE_ENV='production'",
-    "lint": "eslint ./ --fix"
+    "lint": "eslint ./ --fix",
+    "debug": "ndb node server.js --prof"
   },
   "keywords": [],
   "author": "yurii",
@@ -31,6 +32,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.3",
+    "ndb": "^1.1.5",
+    "ndb-plus": "^1.0.45",
     "prettier": "^2.0.5"
   },
   "eslintConfig": {

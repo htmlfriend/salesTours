@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "debug:router": "DEBUG=express:router* node server.js",
-    "start:prod": "process.env.NODE_ENV='production'",
+    "start:prod": "set NODE_ENV='production' && node server.js",
     "lint": "eslint ./ --fix",
     "debug": "ndb node server.js --prof"
   },

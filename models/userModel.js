@@ -4,6 +4,9 @@ const bcrypt = require('bcryptjs');
 
 //name, email, photo,password, passwordConfirm
 let userSchema = new mongoose.Schema({
+  passwordChangedAt: {
+    type: Date,
+  },
   name: {
     type: String,
     required: [true, 'Please tell us your name'],
@@ -54,6 +57,19 @@ userSchema.methods.correctPassword = async function (
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+userSchema.methods.changedPasswordAfter = function (JWTTImestamp) {
+  if (this.passwordChangedAt) {
+    // changed from milliseconds to seconds
+    const changedTimeStamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    console.log(changedTimeStamp, JWTTImestamp);
+    return JWTTImestamp < changedTimeStamp; // 100 < 2000
+  }
+  // fase means Not changed
+  return false;
+};
 const User = mongoose.model('Users', userSchema);
 
 module.exports = User;

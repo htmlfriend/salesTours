@@ -1,5 +1,14 @@
 const AppError = require('./../utils/appError');
 
+// token errors
+const handleWebTokenError = () =>
+  new AppError('Invalid token, please log in again', 401);
+
+const handleExpiredTokenError = () => {
+  new AppError('Your token has expired, please log in again', 401);
+};
+
+// mongodb errors
 const handleCastErrorDB = (err) => {
   const message = `Invalid ${err.path}: ${err.value}`;
   return new AppError(message, 400);
@@ -19,6 +28,7 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+// diffrent error for prod and dev
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -49,6 +59,8 @@ const sendErrorProd = (err, res) => {
   }
 };
 
+// universal module
+
 module.exports = (err, req, res, next) => {
   // console.log(err.stack);
   err.statusCode = err.statusCode || 500;
@@ -61,6 +73,8 @@ module.exports = (err, req, res, next) => {
     if (err.name === 'CastError') error = handleCastErrorDB(error);
     if (err.code === 11000) error = handleDuplicateErrorDB(error);
     if (err.name === 'ValidationError') error = handleValidationErrorDB(error);
+    if (err.name === 'JsonWebTokenError') error = handleWebTokenError();
+    if (err.name === 'TokenExpiredError') error = handleExpiredTokenError();
     sendErrorProd(error, res);
   }
 };
